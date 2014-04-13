@@ -51,3 +51,21 @@ func (h wrap)ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	h.Handler.ServeHTTP(w, r)
 }
+
+// Wrap a HTTP handler, adds a STS header even on HTTP.
+func NewAlwaysSTS(h http.Handler) http.Handler {
+	return swrap{h}
+}
+
+type swrap struct {
+	http.Handler
+}
+
+func (h swrap)ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	hdrs := w.Header()
+	hdrs.Set(`X-XSS-Protection`, `1; mode=block`)
+	hdrs.Set(`X-Frame-Options`, `deny`)
+	hdrs.Set(`X-Content-Type-Options`, `nosniff`)
+	hdrs.Set(`Strict-Transport-Security`, `max-age=31536000; includeSubDomains`)
+	h.Handler.ServeHTTP(w, r)
+}
