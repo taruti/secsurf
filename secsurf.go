@@ -41,7 +41,7 @@ type wrap struct {
 	http.Handler
 }
 
-func (h wrap)ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h wrap) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	hdrs := w.Header()
 	hdrs.Set(`X-XSS-Protection`, `1; mode=block`)
 	hdrs.Set(`X-Frame-Options`, `deny`)
@@ -61,7 +61,7 @@ type swrap struct {
 	http.Handler
 }
 
-func (h swrap)ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h swrap) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	hdrs := w.Header()
 	hdrs.Set(`X-XSS-Protection`, `1; mode=block`)
 	hdrs.Set(`X-Frame-Options`, `deny`)
